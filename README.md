@@ -1,0 +1,1 @@
+An example app demonstrating HTML5 canvas animations, alongside JavaScript ES6, RequireJs, Mocha, and Chai.

@@ -1,0 +1,26 @@
+<html>
+    <head>
+    <style>
+        body {padding: 5px}
+        label {display: inline-block; width: 110px; padding: 5px; font-family: consolas}
+    </style>
+    </head>
+    <body>
+        <div>
+            <label id="scoreLabel">Score : </label>
+            <label id="score"></label>
+            <label id="highScoreLabel">High Score : </label>
+            <label id="highScore"></label>
+        </div>
+        <div id="gameCanvas"></div>
+        <p> <b>Instructions:</b> Collect the food as it appears.  WASD or arrow keys to move.
+            <br/> Don't touch the edge of the screen or run into yourself.  
+        </p>
+        <script src="js/vendor/require.js"></script>
+        <script type="text/javascript">
+            require(['./js/common'], function (common) {
+              require(['main']);
+            });
+        </script>
+    </body>
+</html>

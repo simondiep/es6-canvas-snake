@@ -1,0 +1,17 @@
+{
+  "name": "es6-canvas-snake",
+  "version": "1.0.0",
+  "description": "An example app demonstrating HTML5 canvas animations, alongside JavaScript ES6, RequireJs, Mocha, and Chai.",
+  "scripts": {
+    "pretest": "jshint .",
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "jshint": "^2.9.1",
+    "mocha": "^2.4.5"
+  },
+  "dependencies": {
+    "requirejs": "^2.1.22"
+  }
+}
