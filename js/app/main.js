@@ -1,9 +1,9 @@
 define([
-    "snake-game"
+    "controller/game-controller"
 ],
 
-function (SnakeGame) {
+function (GameController) {
     "use strict";
 
-    new SnakeGame();
+    new GameController();
 });

@@ -6,10 +6,12 @@ define([
 function (Coordinate, Direction) {
     "use strict";
 
-    class Snake {
-        constructor(color) {
+    class Player {
+        constructor(name, color) {
+            this.name = name;
             this.color = color;
             this.direction = Direction.RIGHT;
+            this.directionBeforeMove = Direction.RIGHT;
             this.growQueued = false;
             this.segments = this._generateSegments();
         }
@@ -36,6 +38,8 @@ function (Coordinate, Direction) {
         }
         
         move() {
+            // Record the last drawn player direction, to limit the player from moving too quickly back into themselves
+            this.directionBeforeMove = this.direction;
             if(this.growQueued) {
                 this.growQueued = false;
             } else {
@@ -55,6 +59,6 @@ function (Coordinate, Direction) {
         }
     }
 
-    return Snake;
+    return Player;
 
 });     

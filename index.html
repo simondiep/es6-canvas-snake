@@ -3,9 +3,18 @@
     <style>
         body {padding: 5px}
         label {display: inline-block; width: 110px; padding: 5px; font-family: consolas}
+        #playerName {width: 250px; border: 1px solid grey; font-size: 16px; font-family: consolas}
+        #playerName:read-only {border: 1px solid rgba(0,0,0,0);}
+        #changePlayerNameButton {width: 120px}
+        #invalidPlayerNameLabel {color: red; display: none}
     </style>
     </head>
     <body>
+        <div>
+            <input id="playerName" readonly="readonly"></input>
+            <button id="changePlayerNameButton">Change Name</button>
+            <label id="invalidPlayerNameLabel">Please Enter a Valid Name</label>
+        </div>
         <div>
             <label id="scoreLabel">Score : </label>
             <label id="score"></label>
