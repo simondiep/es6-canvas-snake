@@ -5,13 +5,13 @@ define([
 function (Coordinate) {
     "use strict";
     
-    class CanvasView {
+    class BoardView {
         
-        constructor(canvas) {
+        constructor(canvas, squareSizeInPixels) {
             this.height = canvas.height;
             this.width = canvas.width;
             this.context = canvas.getContext("2d");
-            this.squareSizeInPixels = canvas.width / 40;
+            this.squareSizeInPixels = squareSizeInPixels;
             this.isSplashScreenDisplayed = false;
         }
         
@@ -44,7 +44,7 @@ function (Coordinate) {
         
         /**
          *  Returns a random coordinate within the range of 1 to n, where n is scaled by this.squareSizeInPixels
-         *  In terms of screen pixels, n * this.squareSizeInPixels = canvas width or height
+         *  In terms of screen pixels, n * this.squareSizeInPixels = board width or height
          */
         getRandomCoordinate(excludedCoordinates) {
             let maxBoundingBoxUnitX = (this.width - this.squareSizeInPixels)/this.squareSizeInPixels;
@@ -92,6 +92,6 @@ function (Coordinate) {
         }
     }
 
-    return CanvasView;
+    return BoardView;
 
 });     

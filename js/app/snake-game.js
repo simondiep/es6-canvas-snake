@@ -1,19 +1,21 @@
 define([
     "model/direction",
+    "model/food",
     "model/score-board",
     "model/snake",
-    "view/canvas-view-factory"
+    "view/board-view-factory"
 ],
 
-function (Direction, ScoreBoard, Snake, CanvasViewFactory) {
+function (Direction, Food, ScoreBoard, Snake, BoardViewFactory) {
     "use strict";
 
     const GAME_TITLE = "SNAKE!";
     const NEW_GAME_MESSAGE = "Press SPACE to begin";
     const MAX_FPS = 60;
     const STARTING_FPS = 8;
-    const CANVAS_HEIGHT_PX = 400;
-    const CANVAS_WIDTH_PX = 500;
+    const SQUARE_SIZE_IN_PIXELS = 12.5;
+    const HORIZONTAL_SQUARES = 50;
+    const VERTICAL_SQUARES = 40;
     const SPACE_BAR_KEYCODE = 32;
     const KEYCODE_TO_DIRECTION = {
         87 : Direction.UP,    //W
@@ -30,8 +32,8 @@ function (Direction, ScoreBoard, Snake, CanvasViewFactory) {
 
         constructor() {
             this.scoreBoard = new ScoreBoard();
-            this.canvasView = new CanvasViewFactory().createCanvasView(CANVAS_WIDTH_PX, CANVAS_HEIGHT_PX);
-            this.canvasView.clear();
+            this.boardView = BoardViewFactory.createBoardView(SQUARE_SIZE_IN_PIXELS, HORIZONTAL_SQUARES, VERTICAL_SQUARES);
+            this.boardView.clear();
             this._initializeKeyDownHandlers();
             this._initializeGameValues();
         }
@@ -39,9 +41,9 @@ function (Direction, ScoreBoard, Snake, CanvasViewFactory) {
         // Runs a single game cycle
         runGameCycle() {
             // Start by drawing the current state
-            this.canvasView.clear();
-            this.canvasView.drawSquare(this.foodLocation, "lightgreen"); 
-            this.canvasView.drawSquares(this.snake.segments, "white");
+            this.boardView.clear();
+            this.boardView.drawSquare(this.food.location, this.food.color); 
+            this.boardView.drawSquares(this.snake.segments, this.snake.color);
             // Record the last drawn snake direction, to limit the player from moving too quickly back into themselves
             this.lastKnownSnakeDirection = this.snake.direction;
             
@@ -51,16 +53,16 @@ function (Direction, ScoreBoard, Snake, CanvasViewFactory) {
             // Check the snake for lose conditions
             if(this._isGameOver()) {
                 // Draw the losing head position in red
-                this.canvasView.drawSquare(this.snake.segments[1], "red");
+                this.boardView.drawSquare(this.snake.segments[1], "red");
                 this._initializeGameValues();
                 // Break out of the game cycle
                 return;
             }
             
             // If the snake has collected food this turn, increase the game speed and grow the snake next turn 
-            if(this.snake.getHeadLocation().equals(this.foodLocation)) {
+            if(this.snake.getHeadLocation().equals(this.food.location)) {
                 this.snake.growNextTurn();
-                this.foodLocation = this.canvasView.getRandomCoordinate(this.snake.segments);
+                this.food.setLocation(this.boardView.getRandomCoordinate(this.snake.segments));
                 // Increase game speed through FPS
                 this.currentFPS = this.currentFPS >= MAX_FPS? MAX_FPS : this.currentFPS+1;
                 this.scoreBoard.increaseScore();
@@ -79,10 +81,10 @@ function (Direction, ScoreBoard, Snake, CanvasViewFactory) {
         _initializeGameValues() {
             this.currentFPS = STARTING_FPS;
             this.scoreBoard.resetScore();
-            this.canvasView.showSplashScreen(GAME_TITLE, NEW_GAME_MESSAGE);
-            this.snake = new Snake();
+            this.boardView.showSplashScreen(GAME_TITLE, NEW_GAME_MESSAGE);
+            this.snake = new Snake("white");
             this.lastKnownSnakeDirection = this.snake.direction;
-            this.foodLocation = this.canvasView.getRandomCoordinate(this.snake.segments);
+            this.food = new Food(this.boardView.getRandomCoordinate(this.snake.segments), "lightgreen");
         }
         
         /*******************
@@ -94,7 +96,7 @@ function (Direction, ScoreBoard, Snake, CanvasViewFactory) {
         }
         
         _handleKeyDown(e) {
-            if(this.canvasView.isSplashScreenDisplayed) {
+            if(this.boardView.isSplashScreenDisplayed) {
                 if(e.keyCode === SPACE_BAR_KEYCODE) {
                     this.runGameCycle();
                 }
@@ -111,7 +113,7 @@ function (Direction, ScoreBoard, Snake, CanvasViewFactory) {
          *******************/
          
         _isGameOver() {
-            return this.snake.hasCollidedWithSelf() || this.canvasView.isOutOfBounds(this.snake.getHeadLocation());
+            return this.snake.hasCollidedWithSelf() || this.boardView.isOutOfBounds(this.snake.getHeadLocation());
         }
         
         // Check if a new direction is not going backwards

@@ -7,7 +7,8 @@ function (Coordinate, Direction) {
     "use strict";
 
     class Snake {
-        constructor() {
+        constructor(color) {
+            this.color = color;
             this.direction = Direction.RIGHT;
             this.growQueued = false;
             this.segments = this._generateSegments();
